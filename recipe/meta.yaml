@@ -1,4 +1,4 @@
-{% set version = "0.9.4" %}
+{% set version = "0.9.5" %}
 
 package:
   name: wgpu-py
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
-  sha256: 2431916bbf2b9828be88016d46248f278c0bef6377610546738a7352e98e655f
+  sha256: ad76a8a540bba5285ea121350acb15fca5ac4ea411b432f9f0a3db986d8ee776
   patches:
     - no_libraries.patch
     - update_version_targetted.patch
