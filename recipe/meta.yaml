@@ -24,7 +24,7 @@ requirements:
     - python >=3.8
     - cffi >=1.15.0
     - rubicon-objc >=0.4.1  # [osx]
-    - wgpu-native 0.14
+    - wgpu-native 0.17
     - __linux  # [linux]
     - __win    # [win]
     - __osx    # [osx]
