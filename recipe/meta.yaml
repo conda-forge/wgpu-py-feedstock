@@ -9,7 +9,6 @@ source:
   sha256: c46677e3b78ac2198c480711a8e64b0e692e42482bd8ed727bdd5363177bf713
   patches:
     - no_libraries.patch
-    - update_version_targetted.patch
 
 build:
   noarch: python
