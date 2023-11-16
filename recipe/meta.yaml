@@ -8,7 +8,7 @@ source:
   url: https://pypi.io/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
   sha256: 35d3a7b975e8eaa2b8f5b8870d1f1829eafe444045bb650802f887d9599303f3
   patches:
-    - no_libraries.patch
+    - 0001-Use-conda-forge-s-system-libraries-for-wgpu-native.patch
 
 build:
   noarch: python
