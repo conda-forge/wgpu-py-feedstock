@@ -24,7 +24,7 @@ requirements:
     - cffi >=1.15.0
     - rubicon-objc >=0.4.1  # [osx]
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
-    - wgpu-native 0.18.1.3
+    - wgpu-native 0.18.1.4
     - __linux  # [linux]
     - __win    # [win]
     - __osx    # [osx]
