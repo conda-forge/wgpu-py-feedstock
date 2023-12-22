@@ -1,0 +1,7 @@
+diff --git a/wgpu/backends/wgpu_native/__init__.py b/wgpu/backends/wgpu_native/__init__.py
+index ce02d5f..d9fb36b 100644
+--- a/wgpu/backends/wgpu_native/__init__.py
++++ b/wgpu/backends/wgpu_native/__init__.py
+@@ -15 +15 @@ version_info = tuple(map(int, __version__.split(".")))
+-_check_expected_version(version_info)  # produces a warning on mismatch
++# _check_expected_version(version_info)  # produces a warning on mismatch
