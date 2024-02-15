@@ -1,4 +1,4 @@
-{% set version = "0.14.0" %}
+{% set version = "0.14.1" %}
 
 package:
   name: wgpu-py
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
-  sha256: 88d49bb1434b0d1a8bb3364f59816c2943b29e57e44fdbad5dc7b69e00b024dd
+  sha256: b79dad67af6f2eb5804f6b40307e4ad8cdf1425ea94e8bdbf69f98eb984f5988
   patches:
     - 0001-Use-conda-forge-s-system-libraries-for-wgpu-native.patch
     - no_check_for_version.patch
@@ -29,7 +29,7 @@ requirements:
     - __linux  # [linux]
     - __win    # [win]
     - __osx    # [osx]
-  run_constrained:          # [osx]
+  run_constrained:   # [osx]
     # seems like rubicon-objc doesn't support pypy...
     - python *=*_cpython    # [osx]
 
