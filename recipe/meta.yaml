@@ -1,4 +1,4 @@
-{% set version = "0.14.1" %}
+{% set version = "0.15.0" %}
 
 package:
   name: wgpu-py
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
-  sha256: b79dad67af6f2eb5804f6b40307e4ad8cdf1425ea94e8bdbf69f98eb984f5988
+  sha256: 6e12e71dc51648de12453e025791a16ce2edd8c3450027fffb22d2563dd78de3
   patches:
     - 0001-Use-conda-forge-s-system-libraries-for-wgpu-native.patch
     - no_check_for_version.patch
@@ -25,7 +25,7 @@ requirements:
     - cffi >=1.15.0
     - rubicon-objc >=0.4.1  # [osx]
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
-    - wgpu-native 0.19.1.1
+    - wgpu-native 0.19.3.1
     - __linux  # [linux]
     - __win    # [win]
     - __osx    # [osx]
