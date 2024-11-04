@@ -5,7 +5,7 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
   sha256: c4c5544eb0e4c2297e54fd35538bd51c144221adfb0c012d6b26155e4f19e7ce
   patches:
     - 0001-Use-conda-forge-s-system-libraries-for-wgpu-native.patch
