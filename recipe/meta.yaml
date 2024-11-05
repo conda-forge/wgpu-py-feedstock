@@ -14,7 +14,8 @@ source:
 
 build:
   noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  script:
+    - {{ PYTHON }} -m pip install . -vv
   number: 0
 
 requirements:
@@ -28,6 +29,9 @@ requirements:
     - rubicon-objc >=0.4.1  # [osx]
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
     - wgpu-native 22.1.0.5
+    # Keep webgpu-headers in sync with wgpu-native
+    # For newer versions we have a run_constraint
+    - webgpu-headers 0.0.0.2024.6.12
     - __linux  # [linux]
     - __win    # [win]
     - __osx    # [osx]
