@@ -1,0 +1,73 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 6e8a934..16383ea 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -43,25 +43,7 @@ Repository = "https://github.com/pygfx/wgpu-py"
+ # * mesonpy: numpy, scikit-image, et al. use this because they compile stuff.
+ 
+ [build-system]
+-requires = ["requests", "hatchling"]
+-build-backend = "hatchling.build"
+-
+-[tool.hatch.version]
+-path = "wgpu/_version.py"
+-
+-[tool.hatch.build.targets.sdist]
+-packages = ["wgpu"]
+-exclude = ["*.so", "*.dll", "*.dylib"]
+-force-include = { "tools" = "tools" }
+-
+-[tool.hatch.build.targets.wheel]
+-packages = ["wgpu"]
+-artifacts = ["*.so", "*.dll", "*.dylib"]
+-
+-# We use a hatch build hook to install the correct wgpu-native lib right before
+-# the wheel is build, and to allow cross-platform builds. See the tools dir.
+-[tool.hatch.build.targets.wheel.hooks.custom]
+-path = "tools/hatch_build.py"
++requires = ["setuptools", "wheel"]
+ 
+ # ===== Tooling
+ 
+diff --git a/wgpu/backends/wgpu_native/_ffi.py b/wgpu/backends/wgpu_native/_ffi.py
+index 60d7066..a3ad07d 100644
+--- a/wgpu/backends/wgpu_native/_ffi.py
++++ b/wgpu/backends/wgpu_native/_ffi.py
+@@ -1,6 +1,7 @@
+ """Loading the header, the lib, and setting up its logging."""
+ 
+ import os
++from pathlib import Path
+ import sys
+ import logging
+ 
+@@ -18,10 +19,25 @@ if cffi_version_info < (1, 10):  # no-cover
+ 
+ def get_wgpu_header():
+     """Read header file and strip some stuff that cffi would stumble on."""
+-    return _get_wgpu_header(
+-        get_resource_filename("webgpu.h"),
+-        get_resource_filename("wgpu.h"),
+-    )
++    include_dirs = [
++        Path(sys.exec_prefix) / 'include',
++        Path(sys.exec_prefix) / 'Library' / 'include',
++    ]
++    for include_dir in include_dirs:
++        if (webgpu := include_dir / 'webgpu.h').exists():
++            webgpu = str(webgpu)
++            break
++    else:
++        raise FileNotFoundError("Could not find webgpu.h")
++
++    for include_dir in include_dirs:
++        if (wgpu := include_dir / 'wgpu.h').exists():
++            wgpu = str(wgpu)
++            break
++    else:
++        raise FileNotFoundError("Could not find wgpu.h")
++
++    return _get_wgpu_header(str(webgpu), str(wgpu))
+ 
+ 
+ def _get_wgpu_header(*filenames):
