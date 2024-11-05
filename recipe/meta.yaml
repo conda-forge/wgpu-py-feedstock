@@ -1,15 +1,16 @@
-{% set version = "0.18.1" %}
+{% set version = "0.19.0" %}
 
 package:
   name: wgpu-py
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
-  sha256: b25fb7f115d05a7ffadf3f13b63e2d2e135ca85f6b982bd4fd214b3ed603a67e
+  url: https://pypi.org/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
+  sha256: c4c5544eb0e4c2297e54fd35538bd51c144221adfb0c012d6b26155e4f19e7ce
   patches:
     - 0001-Use-conda-forge-s-system-libraries-for-wgpu-native.patch
     - no_check_for_version.patch
+    - no_hatchling.patch
 
 build:
   noarch: python
@@ -18,14 +19,18 @@ build:
 
 requirements:
   host:
-    - python >=3.8
+    - python >=3.9
     - pip
+    - setuptools
   run:
-    - python >=3.8
+    - python >=3.9
     - cffi >=1.15.0
     - rubicon-objc >=0.4.1  # [osx]
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
     - wgpu-native 22.1.0.5
+    # Keep webgpu-headers in sync with wgpu-native
+    # For newer versions we have a run_constraint
+    - webgpu-headers 0.0.0.2024.6.12
     - __linux  # [linux]
     - __win    # [win]
     - __osx    # [osx]
