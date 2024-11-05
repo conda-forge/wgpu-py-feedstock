@@ -30,7 +30,7 @@ index 6e8a934..16383ea 100644
  # ===== Tooling
  
 diff --git a/wgpu/backends/wgpu_native/_ffi.py b/wgpu/backends/wgpu_native/_ffi.py
-index 60d7066..010668c 100644
+index 60d7066..b3aba39 100644
 --- a/wgpu/backends/wgpu_native/_ffi.py
 +++ b/wgpu/backends/wgpu_native/_ffi.py
 @@ -1,6 +1,7 @@
@@ -41,13 +41,33 @@ index 60d7066..010668c 100644
  import sys
  import logging
  
-@@ -19,8 +20,8 @@ if cffi_version_info < (1, 10):  # no-cover
+@@ -18,10 +19,25 @@ if cffi_version_info < (1, 10):  # no-cover
+ 
  def get_wgpu_header():
      """Read header file and strip some stuff that cffi would stumble on."""
-     return _get_wgpu_header(
+-    return _get_wgpu_header(
 -        get_resource_filename("webgpu.h"),
 -        get_resource_filename("wgpu.h"),
-+        str(Path(sys.exec_prefix) / 'include' / 'webgpu.h'),
-+        str(Path(sys.exec_prefix) / 'include' / 'wgpu.h'),
-     )
+-    )
++    include_dirs = [
++        Path(sys.exec_prefix) / 'include',
++        Path(sys.exec_prefix) / 'Library' / 'include',
++    ]
++    for include_dir in include_dirs:
++        if (webgpu := include_dir / 'webgpu.h').exists():
++            webgpu = str(wgpu)
++            break
++    else:
++        raise FileNotFoundError("Could not find webgpu.h")
++
++    for include_dir in include_dirs:
++        if (wgpu := include_dir / 'wgpu.h').exists():
++            wgpu = str(wgpu)
++            break
++    else:
++        raise FileNotFoundError("Could not find wgpu.h")
++
++    return _get_wgpu_header(str(webgpu), str(wgpu))
  
+ 
+ def _get_wgpu_header(*filenames):
