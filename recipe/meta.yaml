@@ -10,12 +10,11 @@ source:
   patches:
     - 0001-Use-conda-forge-s-system-libraries-for-wgpu-native.patch
     - no_check_for_version.patch
-    - no_hatching.patch
+    - no_hatchling.patch
 
 build:
   noarch: python
-  script:
-    - {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . -vv
   number: 0
 
 requirements:
