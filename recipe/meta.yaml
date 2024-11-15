@@ -15,15 +15,15 @@ source:
 build:
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv
-  number: 0
+  number: 1
 
 requirements:
   host:
-    - python >=3.9
+    - python {{ python_min }}
     - pip
-    - setuptools
+    - hatchling
   run:
-    - python >=3.9
+    - python >={{ python_min }}
     - cffi >=1.15.0
     - rubicon-objc >=0.4.1  # [osx]
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
@@ -44,6 +44,7 @@ test:
     - wgpu.backends.wgpu_native
   requires:
     - pip
+    - python {{ python_min }}
   commands:
     - pip check
 
