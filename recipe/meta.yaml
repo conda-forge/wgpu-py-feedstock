@@ -44,9 +44,7 @@ test:
     - wgpu.backends.wgpu_native
   requires:
     - pip
-    # Check for both old and new python
-    - python {{ python_min }}  # [unix]
-    - python 3.13              # [win]
+    - python {{ python_min }}
   commands:
     - pip check
 
