@@ -19,11 +19,11 @@ build:
 
 requirements:
   host:
-    - python >=3.9
+    - python {{ python_min }}
     - pip
     - hatchling
   run:
-    - python >=3.9
+    - python >={{ python_min }}
     - cffi >=1.15.0
     - rubicon-objc >=0.4.1  # [osx]
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
@@ -44,6 +44,9 @@ test:
     - wgpu.backends.wgpu_native
   requires:
     - pip
+    # Check for both old and new python
+    - python {{ python_min }}  # [unix]
+    - python 3.13              # [win]
   commands:
     - pip check
 
