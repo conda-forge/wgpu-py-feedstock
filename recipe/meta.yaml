@@ -1,4 +1,4 @@
-{% set version = "0.19.0" %}
+{% set version = "0.19.2" %}
 
 package:
   name: wgpu-py
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
-  sha256: c4c5544eb0e4c2297e54fd35538bd51c144221adfb0c012d6b26155e4f19e7ce
+  sha256: 157483bed854c2ebb7988fc62d3d7e22568d5fc51627765ad5fde798b4a45c97
   patches:
     - 0001-Use-conda-forge-s-system-libraries-for-wgpu-native.patch
     - no_check_for_version.patch
@@ -15,7 +15,7 @@ source:
 build:
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv
-  number: 1
+  number: 0
 
 requirements:
   host:
