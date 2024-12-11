@@ -26,6 +26,7 @@ requirements:
     - python >={{ python_min }}
     - cffi >=1.15.0
     - rubicon-objc >=0.4.1  # [osx]
+    - sniffio
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
     - wgpu-native 22.1.0.5
     # Keep webgpu-headers in sync with wgpu-native
