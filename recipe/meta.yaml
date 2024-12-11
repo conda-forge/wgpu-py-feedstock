@@ -11,8 +11,6 @@ source:
     - 0001-Use-conda-forge-s-system-libraries-for-wgpu-native.patch
     - no_check_for_version.patch
     - no_hatchling.patch
-    # https://github.com/pygfx/wgpu-py/pull/649
-    - 649-imgui_bundle_compatibility.patch
 
 build:
   noarch: python
