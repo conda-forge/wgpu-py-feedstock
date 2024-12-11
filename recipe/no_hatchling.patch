@@ -15,10 +15,18 @@ index 447d64c..10c89de 100644
  asyncio_default_fixture_loop_scope = "function"
  
 diff --git a/wgpu/backends/wgpu_native/_ffi.py b/wgpu/backends/wgpu_native/_ffi.py
-index 60d7066..9e466a8 100644
+index 60d7066..a3ad07d 100644
 --- a/wgpu/backends/wgpu_native/_ffi.py
 +++ b/wgpu/backends/wgpu_native/_ffi.py
-@@ -18,10 +18,25 @@ if cffi_version_info < (1, 10):  # no-cover
+@@ -1,6 +1,7 @@
+ """Loading the header, the lib, and setting up its logging."""
+ 
+ import os
++from pathlib import Path
+ import sys
+ import logging
+ 
+@@ -18,10 +19,25 @@ if cffi_version_info < (1, 10):  # no-cover
  
  def get_wgpu_header():
      """Read header file and strip some stuff that cffi would stumble on."""
