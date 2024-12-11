@@ -1,19 +1,19 @@
 diff --git a/pyproject.toml b/pyproject.toml
-index 6e8a934..1602916 100644
+index 447d64c..10c89de 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
-@@ -58,11 +58,6 @@ force-include = { "tools" = "tools" }
+@@ -70,11 +70,6 @@ force-include = { "tools" = "tools" }
  packages = ["wgpu"]
  artifacts = ["*.so", "*.dll", "*.dylib"]
-
+ 
 -# We use a hatch build hook to install the correct wgpu-native lib right before
 -# the wheel is build, and to allow cross-platform builds. See the tools dir.
 -[tool.hatch.build.targets.wheel.hooks.custom]
 -path = "tools/hatch_build.py"
 -
- # ===== Tooling
-
- [tool.ruff]
+ [tool.pytest.ini_options]
+ asyncio_default_fixture_loop_scope = "function"
+ 
 diff --git a/wgpu/backends/wgpu_native/_ffi.py b/wgpu/backends/wgpu_native/_ffi.py
 index 60d7066..a3ad07d 100644
 --- a/wgpu/backends/wgpu_native/_ffi.py
