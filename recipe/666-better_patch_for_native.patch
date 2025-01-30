@@ -1,0 +1,191 @@
+From 531ae45393c213d2c497863afae07b5a009d33db Mon Sep 17 00:00:00 2001
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Date: Sun, 26 Jan 2025 08:47:36 -0500
+Subject: [PATCH] Add patches for conda compatibility
+
+For the conda-forge packages I package wgpu-native myself and install
+them in the "system" libraries.
+
+This should continue to allow you to use the "wheel" vendored headers
+but then also look for the headers in the "system" locations.
+
+I've been dragging on a simpler (less upstreamable) version of this
+patch for about a year but I'm hoping I don't have to with this
+addition.
+---
+ wgpu/_coreutils.py                | 54 ++++++++++++++++++++----
+ wgpu/backends/wgpu_native/_ffi.py | 68 ++++++++++++++++++-------------
+ 2 files changed, 85 insertions(+), 37 deletions(-)
+
+diff --git a/wgpu/_coreutils.py b/wgpu/_coreutils.py
+index 27b1723f..b25536ac 100644
+--- a/wgpu/_coreutils.py
++++ b/wgpu/_coreutils.py
+@@ -9,6 +9,7 @@
+ import logging
+ import importlib.resources
+ from contextlib import ExitStack
++from pathlib import Path
+ 
+ 
+ # Our resources are most probably always on the file system. But in
+@@ -17,15 +18,52 @@
+ atexit.register(_resource_files.close)
+ 
+ 
+-def get_resource_filename(name):
+-    """Get the filename to a wgpu resource."""
+-    if sys.version_info < (3, 9):
+-        context = importlib.resources.path("wgpu.resources", name)
+-    else:
+-        ref = importlib.resources.files("wgpu.resources") / name
+-        context = importlib.resources.as_file(ref)
++def get_header_filename(name):
++    """Get the filename to a wgpu related header resource."""
++    ref = importlib.resources.files("wgpu.resources") / name
++    context = importlib.resources.as_file(ref)
+     path = _resource_files.enter_context(context)
+-    return str(path)
++    if path.exists():
++        return str(path)
++
++    # conda or system based installations may have the headers in other
++    # locations
++    path = Path(sys.exec_prefix) / "include" / name
++    if path.exists():
++        return str(path)
++
++    # Windows conda file layout is slightly different and includes a
++    # Library before the include directory
++    path = Path(sys.exec_prefix) / "Library" / "include" / name
++    if path.exists():
++        return str(path)
++
++    raise RuntimeError(f"Could not find the requested header file {name}.")
++
++
++def get_library_filename(name):
++    """Get the filename to a wgpu related library resource."""
++    ref = importlib.resources.files("wgpu.resources") / name
++    context = importlib.resources.as_file(ref)
++    path = _resource_files.enter_context(context)
++    if path.exists():
++        return str(path)
++
++    # conda or system based installations may have the headers in other
++    # locations
++    # Question for other linux distributions, how can we detect if we should
++    # be using `lib` or `lib64`????
++    path = Path(sys.exec_prefix) / "lib" / name
++    if path.exists():
++        return str(path)
++
++    # Windows conda file layout is slightly different and includes a
++    # Library before the include directory
++    path = Path(sys.exec_prefix) / "Library" / "bin" / name
++    if path.exists():
++        return str(path)
++
++    raise RuntimeError(f"Could not find the requested header file {name}.")
+ 
+ 
+ class WGPULogger(logging.getLoggerClass()):
+diff --git a/wgpu/backends/wgpu_native/_ffi.py b/wgpu/backends/wgpu_native/_ffi.py
+index 60d7066a..3a97ca67 100644
+--- a/wgpu/backends/wgpu_native/_ffi.py
++++ b/wgpu/backends/wgpu_native/_ffi.py
+@@ -4,7 +4,11 @@
+ import sys
+ import logging
+ 
+-from ..._coreutils import get_resource_filename, logger_set_level_callbacks
++from ..._coreutils import (
++    get_library_filename,
++    logger_set_level_callbacks,
++    get_header_filename,
++)
+ 
+ from cffi import FFI, __version_info__ as cffi_version_info
+ 
+@@ -19,8 +23,8 @@
+ def get_wgpu_header():
+     """Read header file and strip some stuff that cffi would stumble on."""
+     return _get_wgpu_header(
+-        get_resource_filename("webgpu.h"),
+-        get_resource_filename("wgpu.h"),
++        get_header_filename("webgpu.h"),
++        get_header_filename("wgpu.h"),
+     )
+ 
+ 
+@@ -66,38 +70,44 @@ def get_wgpu_lib_path():
+ 
+     # Load the debug binary if requested
+     debug_mode = os.getenv("WGPU_DEBUG", "").strip() == "1"
+-    build = "debug" if debug_mode else "release"
+-
+-    # Get lib filename for supported platforms
+-    if sys.platform.startswith("win"):  # no-cover
+-        lib_filename = f"wgpu_native-{build}.dll"
+-    elif sys.platform.startswith("darwin"):  # no-cover
+-        lib_filename = f"libwgpu_native-{build}.dylib"
+-    elif sys.platform.startswith("linux"):  # no-cover
+-        lib_filename = f"libwgpu_native-{build}.so"
+-    else:  # no-cover
+-        raise RuntimeError(
+-            f"No WGPU library shipped for platform {sys.platform}. Set WGPU_LIB_PATH instead."
+-        )
+-
+-    # Note that this can be a false positive, e.g. ARM linux.
+-    embedded_path = get_resource_filename(lib_filename)
+-    if not os.path.isfile(embedded_path):  # no-cover
+-        env_hint = "You can set the WGPU_LIB_PATH env var to the location of the wgpu-native library."
+-        download_hint = _maybe_get_hint_on_download_script().strip()
++    candidate_builds = ["-debug" if debug_mode else "-release"]
++    if not debug_mode:
++        candidate_builds.append("")
++
++    for build in candidate_builds:
++        # Get lib filename for supported platforms
++        if sys.platform.startswith("win"):  # no-cover
++            lib_filename = f"wgpu_native{build}.dll"
++        elif sys.platform.startswith("darwin"):  # no-cover
++            lib_filename = f"libwgpu_native{build}.dylib"
++        elif sys.platform.startswith("linux"):  # no-cover
++            lib_filename = f"libwgpu_native{build}.so"
++        else:  # no-cover
++            raise RuntimeError(
++                f"No WGPU library shipped for platform {sys.platform}. Set WGPU_LIB_PATH instead."
++            )
++
++        try:
++            embedded_path = get_library_filename(lib_filename)
++            return embedded_path
++        except RuntimeError:
++            pass
++    else:
++        main_hint = "Could not find WGPU library libwpgu_native."
+         pip_hint = _maybe_get_pip_hint().strip()
+-        hints = [pip_hint, download_hint, env_hint]
++        download_hint = _maybe_get_hint_on_download_script().strip()
++        env_hint = "You can set the WGPU_LIB_PATH env var to the location of the wgpu-native library."
++
++        hints = [main_hint, pip_hint, download_hint, env_hint]
+         hints = "\n".join([hint for hint in hints if hint])
+-        hints = "\n" + hints if hints else ""
+-        raise RuntimeError(f"Could not find WGPU library in {embedded_path}.{hints}")
+-    else:
+-        return embedded_path
++        raise RuntimeError(hints)
+ 
+ 
+ def _maybe_get_hint_on_download_script():
+-    root_dir = os.path.join(get_resource_filename(""), "..", "..")
++    lib_module = sys.modules[__name__.split(".")[0]]
++    lib_dir = os.path.abspath(os.path.dirname(lib_module.__file__))
+     filename = os.path.abspath(
+-        os.path.join(root_dir, "tools", "download_wgpu_native.py")
++        os.path.join(lib_dir, "..", "tools", "download_wgpu_native.py")
+     )
+     uses_repo = os.path.isfile(filename)
+ 
