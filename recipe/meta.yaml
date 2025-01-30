@@ -16,8 +16,14 @@ source:
 
 build:
   noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
-  number: 1
+  script:
+    # Don't vendor the headers, let them get pulled in by webgpu-headers at runtime
+    - rm wgpu/resources/webgpu.h   # [unix]
+    - rm wgpu/resources/wgpu.h     # [unix]
+    - del wgpu\resources\webgpu.h  # [win]
+    - del wgpu\resources\wgpu.h    # [win]
+    - {{ PYTHON }} -m pip install . -vv
+  number: 2
 
 requirements:
   host:
@@ -32,7 +38,7 @@ requirements:
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
     - wgpu-native 22.1.0.5
     # Keep webgpu-headers in sync with wgpu-native
-    # For newer versions we have a run_constraint
+    # For newer versions (after 22.1.0.5) we have a run_constraint
     - webgpu-headers 0.0.0.2024.6.12
     - __linux  # [linux]
     - __win    # [win]
