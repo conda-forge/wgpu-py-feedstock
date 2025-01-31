@@ -11,7 +11,6 @@ source:
     # - 0001-Use-conda-forge-s-system-libraries-for-wgpu-native.patch
     # https://github.com/pygfx/wgpu-py/pull/666
     - 666-better_patch_for_native.patch
-    - no_check_for_version.patch
     # https://github.com/pygfx/wgpu-py/pull/669
     - no_hatchling.patch
     - lazy_load_requests_in_hatchling.patch
