@@ -12,10 +12,15 @@ source:
     # https://github.com/pygfx/wgpu-py/pull/666
     - 666-better_patch_for_native.patch
     - no_check_for_version.patch
+    # https://github.com/pygfx/wgpu-py/pull/669
     - no_hatchling.patch
 
 build:
   noarch: python
+  script_env:
+    # Avoid pulling in any binary files during the hatchling building process
+    # https://github.com/pygfx/wgpu-py/pull/669
+    - WGPU_PY_BUILD_NOARCH=1
   script:
     # Don't vendor the headers, let them get pulled in by webgpu-headers at runtime
     - rm wgpu/resources/webgpu.h   # [unix]
@@ -23,7 +28,7 @@ build:
     - del wgpu\resources\webgpu.h  # [win]
     - del wgpu\resources\wgpu.h    # [win]
     - {{ PYTHON }} -m pip install . -vv
-  number: 2
+  number: 3
 
 requirements:
   host:
