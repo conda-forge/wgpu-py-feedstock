@@ -1,15 +1,17 @@
-diff --git a/pyproject.toml b/pyproject.toml
-index 447d64c..10c89de 100644
---- a/pyproject.toml
-+++ b/pyproject.toml
-@@ -70,11 +70,6 @@ force-include = { "tools" = "tools" }
- packages = ["wgpu"]
- artifacts = ["*.so", "*.dll", "*.dylib"]
+diff --git a/tools/hatch_build.py b/tools/hatch_build.py
+index 0925d67d..2483bccf 100644
+--- a/tools/hatch_build.py
++++ b/tools/hatch_build.py
+@@ -42,8 +42,11 @@ def initialize(self, version, build_data):
+         # We only do our thing when this is a wheel build from the repo.
+         # If this is an sdist build, or a wheel build from an sdist,
+         # we go pure-Python mode, and expect the user to set WGPU_LIB_PATH.
++        # We also allow building an arch-agnostic wheel explicitly, using an env var.
  
--# We use a hatch build hook to install the correct wgpu-native lib right before
--# the wheel is build, and to allow cross-platform builds. See the tools dir.
--[tool.hatch.build.targets.wheel.hooks.custom]
--path = "tools/hatch_build.py"
--
- [tool.pytest.ini_options]
- asyncio_default_fixture_loop_scope = "function"
+-        if self.target_name == "wheel" and is_git_repo():
++        if os.getenv("WGPU_PY_BUILD_NOARCH", "").lower() in ("1", "true"):
++            pass  # Explicitly disable including the lib
++        elif self.target_name == "wheel" and is_git_repo():
+             # Prepare
+             check_git_status()
+             remove_all_libs()
