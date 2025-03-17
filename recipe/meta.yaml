@@ -34,10 +34,9 @@ requirements:
     - rubicon-objc >=0.4.1  # [osx]
     - sniffio
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
-    - wgpu-native 22.1.0.5
-    # Keep webgpu-headers in sync with wgpu-native
-    # For newer versions (after 22.1.0.5) we have a run_constraint
-    - webgpu-headers 0.0.0.2024.6.12
+    - wgpu-native 24.0.0.2
+    # For newer versions (after 22.1.0.5) we have a run_constraint on webgpu-headers
+    - webgpu-headers
     - __linux  # [linux]
     - __win    # [win]
     - __osx    # [osx]
