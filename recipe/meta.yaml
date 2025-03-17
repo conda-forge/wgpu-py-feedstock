@@ -36,7 +36,7 @@ requirements:
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
     - wgpu-native 24.0.0.2
     # For newer versions (after 22.1.0.5) we have a run_constraint on webgpu-headers
-    - webgpu-headers 0.0.0.2024.11.12
+    - webgpu-headers 0.0.0.2024.11.12.*
     - __linux  # [linux]
     - __win    # [win]
     - __osx    # [osx]
