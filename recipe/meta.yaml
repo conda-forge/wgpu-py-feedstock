@@ -1,4 +1,4 @@
-{% set version = "0.20.1" %}
+{% set version = "0.21.0" %}
 
 package:
   name: wgpu-py
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
-  sha256: ad3cde81051b274c020e28fe2e1fa490444f3fceb9f2cf53dd044ff6a2e26420
+  sha256: eaa6ea6d887e92d5e19e28e26797053d8c0762f038d9042114ac4f15659689e4
 
 build:
   noarch: python
