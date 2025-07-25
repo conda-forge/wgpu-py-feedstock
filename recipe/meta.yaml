@@ -1,3 +1,4 @@
+{% set python_min = "3.10" %}
 {% set version = "0.23.0" %}
 
 package:
@@ -7,6 +8,9 @@ package:
 source:
   url: https://pypi.org/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
   sha256: 62be1fbd08295f618d4aaca6c288eea446f532f13218b9545af07fe48b9068c4
+  patches:
+    # Compatibility with imgui-bundle>=1.92
+    - 725.diff
 
 build:
   noarch: python
@@ -42,6 +46,7 @@ requirements:
   run_constrained:   # [osx]
     # seems like rubicon-objc doesn't support pypy...
     - python *=*_cpython    # [osx]
+    - imgui-bundle >=1.92.0,<2.0a
 
 test:
   imports:
