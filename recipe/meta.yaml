@@ -8,9 +8,6 @@ package:
 source:
   url: https://pypi.org/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
   sha256: 1040974678e8c7049e4d772fec404196b0173f9ff76bd70c72d9c97bf1993bdb
-  patches:
-    # Compatibility with imgui-bundle>=1.92
-    - 725.diff
 
 build:
   noarch: python
