@@ -22,7 +22,7 @@ build:
     - del wgpu\resources\webgpu.h  # [win]
     - del wgpu\resources\wgpu.h    # [win]
     - {{ PYTHON }} -m pip install . -vv
-  number: 0
+  number: 1
 
 requirements:
   host:
@@ -35,7 +35,7 @@ requirements:
     - rubicon-objc >=0.4.1  # [osx]
     - sniffio
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
-    - wgpu-native 25.0.2.2
+    - wgpu-native 27.0.2.0
     - webgpu-headers
     - __linux  # [linux]
     - __win    # [win]
