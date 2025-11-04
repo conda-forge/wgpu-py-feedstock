@@ -8,6 +8,9 @@ package:
 source:
   url: https://pypi.org/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
   sha256: c90c1fee6fe0fcd573fc9d490e2a25979be693ede3696a9ea3bbbf83bef1ca63
+  patches:
+    # https://github.com/pygfx/wgpu-py/issues/763
+    - workaround_for_imgui_crash.diff
 
 build:
   noarch: python
@@ -22,7 +25,7 @@ build:
     - del wgpu\resources\webgpu.h  # [win]
     - del wgpu\resources\wgpu.h    # [win]
     - {{ PYTHON }} -m pip install . -vv
-  number: 1
+  number: 2
 
 requirements:
   host:
