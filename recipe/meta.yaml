@@ -1,5 +1,5 @@
 {% set python_min = "3.10" %}
-{% set version = "0.26.0" %}
+{% set version = "0.27.0" %}
 
 package:
   name: wgpu-py
@@ -7,11 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
-  sha256: c90c1fee6fe0fcd573fc9d490e2a25979be693ede3696a9ea3bbbf83bef1ca63
-  patches:
-    # https://github.com/pygfx/wgpu-py/pull/765
-    # https://github.com/pygfx/wgpu-py/issues/763
-    - 765-fix-memory-released.patch
+  sha256: 4614d3f8dcdd1d3b9a7da1f2ac3ffa2f1ac4e6738bd88fc0f2e0d036bbf3f685
 
 build:
   noarch: python
@@ -26,7 +22,7 @@ build:
     - del wgpu\resources\webgpu.h  # [win]
     - del wgpu\resources\wgpu.h    # [win]
     - {{ PYTHON }} -m pip install . -vv
-  number: 3
+  number: 0
 
 requirements:
   host:
