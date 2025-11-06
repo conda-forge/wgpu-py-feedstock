@@ -8,10 +8,6 @@ package:
 source:
   url: https://pypi.org/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
   sha256: 4614d3f8dcdd1d3b9a7da1f2ac3ffa2f1ac4e6738bd88fc0f2e0d036bbf3f685
-  patches:
-    # https://github.com/pygfx/wgpu-py/pull/765
-    # https://github.com/pygfx/wgpu-py/issues/763
-    - 765-fix-memory-released.patch
 
 build:
   noarch: python
