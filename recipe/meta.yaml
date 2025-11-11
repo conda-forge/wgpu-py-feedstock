@@ -37,6 +37,10 @@ requirements:
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
     - wgpu-native 27.0.2.0
     - webgpu-headers
+    # Check the pypi package requirement
+    # to keep render canvas in sync
+    # https://github.com/pygfx/wgpu-py/blob/main/pyproject.toml
+    - rendercanvas >=2.4
     - __linux  # [linux]
     - __win    # [win]
     - __osx    # [osx]
