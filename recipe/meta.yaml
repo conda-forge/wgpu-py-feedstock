@@ -1,5 +1,5 @@
 {% set python_min = "3.10" %}
-{% set version = "0.27.0" %}
+{% set version = "0.28.0" %}
 
 package:
   name: wgpu-py
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
-  sha256: 4614d3f8dcdd1d3b9a7da1f2ac3ffa2f1ac4e6738bd88fc0f2e0d036bbf3f685
+  sha256: 880590291ac2b23384176ad3fa803caf7b850cf7d0d6cd658f64a8597ae2337c
 
 build:
   noarch: python
@@ -37,6 +37,10 @@ requirements:
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
     - wgpu-native 27.0.2.0
     - webgpu-headers
+    # Check the pypi package requirement
+    # to keep render canvas in sync
+    # https://github.com/pygfx/wgpu-py/blob/main/pyproject.toml
+    - rendercanvas >=2.4
     - __linux  # [linux]
     - __win    # [win]
     - __osx    # [osx]
