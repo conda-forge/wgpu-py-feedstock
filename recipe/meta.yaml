@@ -15,13 +15,7 @@ build:
     # Avoid pulling in any binary files during the hatchling building process
     # https://github.com/pygfx/wgpu-py/pull/669
     - WGPU_PY_BUILD_NOARCH=1
-  script:
-    # Don't vendor the headers, let them get pulled in by webgpu-headers at runtime
-    - rm wgpu/resources/webgpu.h   # [unix]
-    - rm wgpu/resources/wgpu.h     # [unix]
-    - del wgpu\resources\webgpu.h  # [win]
-    - del wgpu\resources\wgpu.h    # [win]
-    - {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . -vv
   number: 0
 
 requirements:
@@ -33,14 +27,12 @@ requirements:
     - python >={{ python_min }}
     - cffi >=1.15.0
     - rubicon-objc >=0.4.1  # [osx]
-    - sniffio
     # https://github.com/pygfx/wgpu-py/blob/main/wgpu/backends/wgpu_native/__init__.py
-    - wgpu-native 27.0.4.0
-    - webgpu-headers
+    - wgpu-native 29.0.1.1
     # Check the pypi package requirement
     # to keep render canvas in sync
     # https://github.com/pygfx/wgpu-py/blob/main/pyproject.toml
-    - rendercanvas >=2.4
+    - rendercanvas >=2.7
     - __linux  # [linux]
     - __win    # [win]
     - __osx    # [osx]
