@@ -1,0 +1,35 @@
+From 495a413209c880b45c42367acad8de14e30d5127 Mon Sep 17 00:00:00 2001
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Date: Mon, 18 Aug 2026 00:00:00 -0400
+Subject: [PATCH] Use len(draw_data.cmd_lists) in imgui backend
+
+Backport of https://github.com/pygfx/wgpu-py/pull/830
+(commit 495a413209c880b45c42367acad8de14e30d5127), which fixes
+https://github.com/pygfx/wgpu-py/issues/829
+
+ImDrawData.cmd_lists_count was a legacy alias documented as
+== CmdLists.Size, and imgui_bundle removed it in 1.92.900, so every
+ImguiWgpuBackend.render() call raises AttributeError against that
+release. len(draw_data.cmd_lists) is exactly what the removed attribute
+equalled and works across the whole supported imgui-bundle>=1.92.0,<2
+range, so no version check or pin change is needed.
+
+Only the source change is backported here; the upstream CHANGELOG,
+CI workflow and test-suite changes are not relevant to the package.
+---
+ wgpu/utils/imgui/imgui_backend.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/wgpu/utils/imgui/imgui_backend.py b/wgpu/utils/imgui/imgui_backend.py
+index 2b87ded1..73a8bd5a 100644
+--- a/wgpu/utils/imgui/imgui_backend.py
++++ b/wgpu/utils/imgui/imgui_backend.py
+@@ -445,7 +445,7 @@ def render(
+         fb_width = int(display_width * draw_data.framebuffer_scale.x)
+         fb_height = int(display_height * draw_data.framebuffer_scale.y)
+ 
+-        if fb_width <= 0 or fb_height <= 0 or draw_data.cmd_lists_count == 0:
++        if fb_width <= 0 or fb_height <= 0 or len(draw_data.cmd_lists) == 0:
+             return
+ 
+         if draw_data.textures is not None:

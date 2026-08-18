@@ -40,31 +40,73 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `wgpu-py` can be installed with `conda`:
+How to use
+----------
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda install wgpu-py
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba install wgpu-py
 ```
 
-It is possible to list all of the versions of `wgpu-py` available on your platform with `conda`:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+# for adding to your local project
+pixi add wgpu-py
+# for installing globally
+pixi global install wgpu-py
+```
+
+</details>
+
+Search package versions
+-----------------------
+
+It is possible to list all of the versions of `wgpu-py` available on your platform:
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda search wgpu-py --channel conda-forge
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba search wgpu-py --channel conda-forge
 ```
 
-Alternatively, `mamba repoquery` may provide more information:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+pixi search wgpu-py --channel conda-forge
+```
+
+</details>
+
+<details>
+<summary>With mamba repoquery, which may provide more information</summary>
 
 ```
 # Search all versions available on your platform:
@@ -76,6 +118,8 @@ mamba repoquery whoneeds wgpu-py --channel conda-forge
 # List dependencies of `wgpu-py`:
 mamba repoquery depends wgpu-py --channel conda-forge
 ```
+
+</details>
 
 
 About conda-forge
