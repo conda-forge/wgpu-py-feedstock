@@ -1,18 +1,13 @@
 {% set python_min = "3.11" %}
-{% set version = "0.32.0" %}
+{% set version = "0.33.0" %}
 
 package:
   name: wgpu-py
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
-  sha256: cb23b2f225594258ccc8ba97458381e46c18e561c5d2d6fc25213e68a6d89985
-  patches:
-    # imgui-bundle 1.92.900 removed ImDrawData.cmd_lists_count
-    # https://github.com/pygfx/wgpu-py/pull/830
-    # https://github.com/pygfx/wgpu-py/issues/829
-    - 0001-Use-len-draw_data.cmd_lists-in-imgui-backend.patch
+  url: https://files.pythonhosted.org/packages/source/w/wgpu/wgpu-{{ version }}.tar.gz
+  sha256: 7b41b3e5f3c96e166c13b3036c3a98023c2200e84ff0f1ab27adc580fa70308c
 
 build:
   noarch: python
@@ -21,7 +16,7 @@ build:
     # https://github.com/pygfx/wgpu-py/pull/669
     - WGPU_PY_BUILD_NOARCH=1
   script: {{ PYTHON }} -m pip install . -vv
-  number: 1
+  number: 0
 
 requirements:
   host:
